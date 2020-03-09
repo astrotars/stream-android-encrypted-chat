@@ -1,0 +1,2 @@
+rootProject.name='Encrypted Chat'
+include ':app'
