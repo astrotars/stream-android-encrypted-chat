@@ -3,20 +3,20 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "identity": "user1"
+  "user": "user1"
 }
 
 ###
-POST http://localhost:8080/v1/stream-token
-Authorization: Bearer IJgjW/zzBuOuuqrDe48AOum7ULR49TShM58k3Gvz54k=
+POST http://localhost:8080/v1/stream-credentials
+Authorization: Bearer cGcuODLKQ8K+pD4LpxsL/APBRmh9wg0S8bIu4Wla8As=
 Accept: application/json
 Content-Type: application/json
 
 {}
 
 ###
-GET http://localhost:8080/v1/virgil-token
-Authorization: Bearer Y4I/W6UpBuHp7rx1CVdJHmZlNic8yq/7VC5RI3FYqWg=
+POST http://localhost:8080/v1/virgil-credentials
+Authorization: Bearer cGcuODLKQ8K+pD4LpxsL/APBRmh9wg0S8bIu4Wla8As=
 Accept: application/json
 Content-Type: application/json
 

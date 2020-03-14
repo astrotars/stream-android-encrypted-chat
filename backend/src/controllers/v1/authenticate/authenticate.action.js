@@ -28,14 +28,14 @@ exports.requireAuthHeader = (req, res, next) => {
 };
 
 exports.authenticate = async (req, res) => {
-  if (!req.body || !req.body.sender) {
-    res.statusMessage = 'You should specify sender in body';
+  if (!req.body || !req.body.user) {
+    res.statusMessage = 'You should specify user in body';
     res.status(400).end();
     return;
   }
   const token = generateUserToken();
 
-  pseudoEncodeToken(req.body.sender, token);
+  pseudoEncodeToken(req.body.user, token);
 
   res.json({ authToken: token });
 };
