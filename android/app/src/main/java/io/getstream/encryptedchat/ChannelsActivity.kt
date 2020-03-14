@@ -1,17 +1,20 @@
 package io.getstream.encryptedchat
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.getstream.sdk.chat.StreamChat
 import com.getstream.sdk.chat.enums.Filters.*
+import com.getstream.sdk.chat.model.Channel
 import com.getstream.sdk.chat.rest.User
 import com.getstream.sdk.chat.viewmodel.ChannelListViewModel
-import io.getstream.encryptedchat.databinding.ActivityMainBinding
+import io.getstream.encryptedchat.databinding.ActivityChannelsBinding
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class ChannelsActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -29,8 +32,8 @@ class MainActivity : AppCompatActivity() {
     )
 
     // we're using data binding in this example
-    val binding: ActivityMainBinding =
-      DataBindingUtil.setContentView(this, R.layout.activity_main)
+    val binding: ActivityChannelsBinding =
+      DataBindingUtil.setContentView(this, R.layout.activity_channels)
     // Specify the current activity as the lifecycle owner.
     binding.lifecycleOwner = this
 
@@ -48,6 +51,16 @@ class MainActivity : AppCompatActivity() {
     binding.channelList.setOnChannelClickListener { channel ->
       val intent = ChannelActivity.newIntent(this, channel)
       startActivity(intent)
+    }
+  }
+
+  companion object {
+    private val EXTRA_USER = "io.getstream.encryptedchat.USER"
+
+    fun newIntent(context: Context, user: String): Intent {
+      val intent = Intent(context, ChannelsActivity::class.java)
+      intent.putExtra(EXTRA_USER, user)
+      return intent
     }
   }
 }
