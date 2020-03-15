@@ -12,9 +12,18 @@ import com.getstream.sdk.chat.model.Channel
 import com.getstream.sdk.chat.rest.User
 import com.getstream.sdk.chat.viewmodel.ChannelListViewModel
 import io.getstream.encryptedchat.databinding.ActivityChannelsBinding
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.util.*
 
 class ChannelsActivity : AppCompatActivity() {
+  val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
+  var client: OkHttpClient = OkHttpClient()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -51,6 +60,17 @@ class ChannelsActivity : AppCompatActivity() {
     binding.channelList.setOnChannelClickListener { channel ->
       val intent = ChannelActivity.newIntent(this, channel)
       startActivity(intent)
+    }
+  }
+
+  fun post(url: String, json: String): String {
+    val body: RequestBody = json.toRequestBody(JSON)
+    val request: Request = Request.Builder()
+      .url(url)
+      .post(body)
+      .build()
+    client.newCall(request).execute().use {
+      return it.body!!.string()
     }
   }
 
