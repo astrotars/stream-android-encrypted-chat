@@ -8,7 +8,7 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8080/v1/stream-credentials
-Authorization: Bearer cGcuODLKQ8K+pD4LpxsL/APBRmh9wg0S8bIu4Wla8As=
+Authorization: Bearer 82Jg4bDN8cu6XWIX5EIVCpeKpFMGflKB9BW7aZkWWyw=
 Accept: application/json
 Content-Type: application/json
 
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8080/v1/virgil-credentials
-Authorization: Bearer cGcuODLKQ8K+pD4LpxsL/APBRmh9wg0S8bIu4Wla8As=
+Authorization: Bearer 82Jg4bDN8cu6XWIX5EIVCpeKpFMGflKB9BW7aZkWWyw=
 Accept: application/json
 Content-Type: application/json
 
