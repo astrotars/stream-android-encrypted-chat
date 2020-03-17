@@ -15,6 +15,9 @@ class ChannelsActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
+    val virgilToken = intent.getStringExtra(EXTRA_VIRGIL_TOKEN)!!
+    val user = intent.getStringExtra(EXTRA_USER)!!
+
     // we're using data binding in this example
     val binding: ActivityChannelsBinding =
       DataBindingUtil.setContentView(this, R.layout.activity_channels)
@@ -25,15 +28,15 @@ class ChannelsActivity : AppCompatActivity() {
     val viewModel = ViewModelProviders.of(this).get(ChannelListViewModel::class.java)
     binding.viewModel = viewModel
     binding.channelList.setViewModel(viewModel, this)
-    binding.channelList.setViewHolderFactory(EncryptedMessageChannelViewHolderFactory())
+    binding.channelList.setViewHolderFactory(SimpleChannelViewHolderFactory())
 
     // query all channels of type messaging
-    val filter = and(eq("type", "messaging"), `in`("members", intent.getStringExtra(EXTRA_USER)))
+    val filter = and(eq("type", "messaging"), `in`("members", user))
     viewModel.setChannelFilter(filter)
 
     // click handlers for clicking a user avatar or channel
     binding.channelList.setOnChannelClickListener { channel ->
-      val intent = ChannelActivity.newIntent(this, channel)
+      val intent = ChannelActivity.newIntent(this, channel, virgilToken)
       startActivity(intent)
     }
   }

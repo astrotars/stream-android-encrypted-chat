@@ -6,15 +6,16 @@ import com.getstream.sdk.chat.R
 import com.getstream.sdk.chat.adapter.BaseMessageListItemViewHolder
 import com.getstream.sdk.chat.adapter.MessageListItemAdapter
 import com.getstream.sdk.chat.adapter.MessageViewHolderFactory
+import com.virgilsecurity.android.ethree.kotlin.interaction.EThree
 
-class EncryptedMessageViewHolderFactory : MessageViewHolderFactory() {
+class EncryptedMessageViewHolderFactory(private val eThree: EThree) : MessageViewHolderFactory() {
     override fun createMessageViewHolder(
         adapter: MessageListItemAdapter?,
         parent: ViewGroup?,
         viewType: Int
     ): BaseMessageListItemViewHolder {
         if(viewType == MESSAGEITEM_MESSAGE) {
-            val holder = EncryptedMessageViewHolder(R.layout.stream_item_message, parent)
+            val holder = EncryptedMessageViewHolder(R.layout.stream_item_message, parent, eThree)
             holder.setViewHolderFactory(this)
             holder.setStyle(adapter!!.style)
             holder.setMarkdownListener(MarkdownImpl.getMarkdownListener())

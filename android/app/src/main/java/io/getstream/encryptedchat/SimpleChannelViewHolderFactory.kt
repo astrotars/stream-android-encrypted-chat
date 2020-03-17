@@ -7,7 +7,7 @@ import com.getstream.sdk.chat.adapter.BaseChannelListItemViewHolder
 import com.getstream.sdk.chat.adapter.ChannelListItemAdapter
 import com.getstream.sdk.chat.adapter.ChannelViewHolderFactory
 
-class EncryptedMessageChannelViewHolderFactory : ChannelViewHolderFactory() {
+class SimpleChannelViewHolderFactory() : ChannelViewHolderFactory() {
     override fun createChannelViewHolder(
         adapter: ChannelListItemAdapter?,
         parent: ViewGroup?,
@@ -16,7 +16,7 @@ class EncryptedMessageChannelViewHolderFactory : ChannelViewHolderFactory() {
         val style = adapter!!.style
         val v = LayoutInflater.from(parent!!.context)
             .inflate(style.channelPreviewLayout, parent, false)
-        val holder = EncryptedMessageChannelListItemViewHolder(v)
+        val holder = SimpleChannelListItemViewHolder(v)
         holder.setStyle(style)
         holder.setMarkdownListener(MarkdownImpl.getMarkdownListener())
         holder.setChannelClickListener(adapter.channelClickListener)
