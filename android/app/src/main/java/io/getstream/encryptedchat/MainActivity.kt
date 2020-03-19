@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.getstream.sdk.chat.StreamChat
 import com.getstream.sdk.chat.rest.User
+import com.virgilsecurity.android.common.exceptions.RegistrationException
+import com.virgilsecurity.android.ethree.kotlin.callback.OnGetTokenCallback
+import com.virgilsecurity.android.ethree.kotlin.interaction.EThree
 import io.getstream.encryptedchat.databinding.ActivityMainBinding
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
@@ -31,15 +34,26 @@ class MainActivity : AppCompatActivity() {
 
     binding.submit.setOnClickListener {
       val user: String = binding.user.text.toString()
+      val context = this
 
       doAsync {
         val authToken = signIn(user)
         val streamToken = getStreamToken(authToken)
         val virgilToken = getVirgilToken(authToken)
 
+        val eThree = EThree.initialize(context, object : OnGetTokenCallback {
+          override fun onGetToken() = virgilToken
+        }).get()
+
+        try {
+          eThree.register().execute()
+        } catch (e: RegistrationException) {
+          // already registered
+        }
+
         uiThread { context ->
           initStream(user, streamToken)
-          val intent = ChannelsActivity.newIntent(context, user, virgilToken)
+          val intent = UsersActivity.newIntent(context, user, authToken, virgilToken)
           startActivity(intent)
         }
       }
@@ -70,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
   private fun post(path: String, body: Map<String, Any>, authToken: String? = null): JSONObject {
     val request = Request.Builder()
-      .url("https://7ffb6a33.ngrok.io${path}")
+      .url("https://96154c61.ngrok.io${path}")
       .post(JSONObject(body).toString().toRequestBody(JSON))
 
     if (authToken != null) {

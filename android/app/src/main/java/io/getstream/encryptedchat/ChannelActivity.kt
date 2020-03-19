@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.getstream.sdk.chat.StreamChat
 import com.getstream.sdk.chat.model.Channel
+import com.getstream.sdk.chat.model.ModelType
+import com.getstream.sdk.chat.rest.request.QueryUserRequest
 import com.getstream.sdk.chat.viewmodel.ChannelViewModel
 import com.getstream.sdk.chat.viewmodel.ChannelViewModelFactory
 import com.virgilsecurity.android.common.exceptions.RegistrationException
@@ -24,8 +26,8 @@ class ChannelActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val channelType = intent.getStringExtra(EXTRA_CHANNEL_TYPE)!!
-        val channelID = intent.getStringExtra(EXTRA_CHANNEL_ID)!!
+        val user = intent.getStringExtra(EXTRA_USER)!!
+        val otherUser = intent.getStringExtra(EXTRA_OTHER_USER)!!
         val virgilToken = intent.getStringExtra(EXTRA_VIRGIL_TOKEN)!!
 
         val client = StreamChat.getInstance(application)
@@ -34,15 +36,12 @@ class ChannelActivity : AppCompatActivity() {
         }).get()
 
         doAsync {
-            val channel = client.channel(channelType, channelID)
+            val channelId =
+                listOf(user, otherUser).sorted().joinToString("-")
 
-            try {
-                eThree.register().execute()
-            } catch (e: RegistrationException) {
-                // already registered
-            }
+            val channel = client.channel(ModelType.channel_messaging, channelId)
 
-            val receiverPublicKeys = eThree.lookupPublicKeys("dewey").get()
+            val receiverPublicKeys = eThree.lookupPublicKeys(otherUser).get()
 
             uiThread { context ->
                 viewModel = ViewModelProviders.of(
@@ -66,14 +65,19 @@ class ChannelActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val EXTRA_CHANNEL_TYPE = "io.getstream.encryptedchat.CHANNEL_TYPE"
-        private val EXTRA_CHANNEL_ID = "io.getstream.encryptedchat.CHANNEL_ID"
+        private val EXTRA_USER = "io.getstream.encryptedchat.USER"
+        private val EXTRA_OTHER_USER = "io.getstream.encryptedchat.OTHER_USER"
         private val EXTRA_VIRGIL_TOKEN = "io.getstream.encryptedchat.VIRGIL_TOKEN"
 
-        fun newIntent(context: Context, channel: Channel, virgilToken: String): Intent {
+        fun newIntent(
+            context: Context,
+            user: String,
+            otherUser: String,
+            virgilToken: String
+        ): Intent {
             val intent = Intent(context, ChannelActivity::class.java)
-            intent.putExtra(EXTRA_CHANNEL_TYPE, channel.type)
-            intent.putExtra(EXTRA_CHANNEL_ID, channel.id)
+            intent.putExtra(EXTRA_USER, user)
+            intent.putExtra(EXTRA_OTHER_USER, otherUser)
             intent.putExtra(EXTRA_VIRGIL_TOKEN, virgilToken)
             return intent
         }
