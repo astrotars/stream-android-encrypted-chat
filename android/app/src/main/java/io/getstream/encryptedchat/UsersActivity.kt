@@ -39,9 +39,7 @@ class UsersActivity : AppCompatActivity() {
 
         doAsync {
             val users = getUsers(authToken).filterNot { it == user }
-            uiThread {
-                adapter.addAll(users)
-            }
+            uiThread { adapter.addAll(users) }
         }
     }
 

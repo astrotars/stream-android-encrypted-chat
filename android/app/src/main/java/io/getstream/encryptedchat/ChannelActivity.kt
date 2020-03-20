@@ -48,9 +48,7 @@ class ChannelActivity : AppCompatActivity() {
             channel.image = "https://robohash.org/${channel.name}"
             channel.update(object : ChannelCallback {
                 override fun onSuccess(response: ChannelResponse?) {
-                    uiThread { context ->
-                        loadMessages(context, channel, eThree, receiverPublicKeys)
-                    }
+                    uiThread { loadMessages(it, channel, eThree, receiverPublicKeys) }
                 }
 
                 override fun onError(errMsg: String?, errCode: Int) {
