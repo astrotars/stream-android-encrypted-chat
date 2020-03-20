@@ -14,7 +14,7 @@ class EncryptedMessageViewHolderFactory(private val eThree: EThree) : MessageVie
         parent: ViewGroup?,
         viewType: Int
     ): BaseMessageListItemViewHolder {
-        if(viewType == MESSAGEITEM_MESSAGE) {
+        if (viewType == MESSAGEITEM_MESSAGE) {
             val holder = EncryptedMessageViewHolder(R.layout.stream_item_message, parent, eThree)
             holder.setViewHolderFactory(this)
             holder.setStyle(adapter!!.style)

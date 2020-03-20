@@ -17,48 +17,48 @@ import org.jetbrains.anko.uiThread
 
 
 class MainActivity : AppCompatActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    // we're using data binding in this example
-    val binding: ActivityMainBinding =
-      DataBindingUtil.setContentView(this, R.layout.activity_main)
-    // Specify the current activity as the lifecycle owner.
-    binding.lifecycleOwner = this
+        // we're using data binding in this example
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
+        // Specify the current activity as the lifecycle owner.
+        binding.lifecycleOwner = this
 
-    binding.submit.setOnClickListener {
-      val user: String = binding.user.text.toString()
-      val context = this
+        binding.submit.setOnClickListener {
+            val user: String = binding.user.text.toString()
+            val context = this
 
-      doAsync {
-        val authToken = signIn(user)
-        val streamToken = getStreamToken(authToken)
-        val virgilToken = getVirgilToken(authToken)
+            doAsync {
+                val authToken = signIn(user)
+                val streamToken = getStreamToken(authToken)
+                val virgilToken = getVirgilToken(authToken)
 
-        val eThree = EThree.initialize(context, object : OnGetTokenCallback {
-          override fun onGetToken() = virgilToken
-        }).get()
+                val eThree = EThree.initialize(context, object : OnGetTokenCallback {
+                    override fun onGetToken() = virgilToken
+                }).get()
 
-        try {
-          eThree.register().execute()
-        } catch (e: RegistrationException) {
-          // already registered
+                try {
+                    eThree.register().execute()
+                } catch (e: RegistrationException) {
+                    // already registered
+                }
+
+                uiThread { context ->
+                    initStream(user, streamToken)
+                    val intent = UsersActivity.newIntent(context, user, authToken, virgilToken)
+                    startActivity(intent)
+                }
+            }
         }
-
-        uiThread { context ->
-          initStream(user, streamToken)
-          val intent = UsersActivity.newIntent(context, user, authToken, virgilToken)
-          startActivity(intent)
-        }
-      }
     }
-  }
 
 
-  private fun initStream(user: String, token: String) {
-    StreamChat.init("whe3wer2pf4r", this.applicationContext)
-    val client = StreamChat.getInstance(this.application)
-    val currentUser = User(user, hashMapOf<String, Any>("name" to user))
-    client.setUser(currentUser, token)
-  }
+    private fun initStream(user: String, token: String) {
+        StreamChat.init("whe3wer2pf4r", this.applicationContext)
+        val client = StreamChat.getInstance(this.application)
+        val currentUser = User(user, hashMapOf<String, Any>("name" to user))
+        client.setUser(currentUser, token)
+    }
 }

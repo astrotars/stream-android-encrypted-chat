@@ -6,7 +6,6 @@ import com.getstream.sdk.chat.adapter.MessageListItem
 import com.getstream.sdk.chat.adapter.MessageListItemViewHolder
 import com.getstream.sdk.chat.adapter.MessageViewHolderFactory.MESSAGEITEM_MESSAGE
 import com.getstream.sdk.chat.model.ModelType
-import com.getstream.sdk.chat.rest.Message
 import com.getstream.sdk.chat.rest.response.ChannelState
 import com.virgilsecurity.android.ethree.kotlin.interaction.EThree
 import org.jetbrains.anko.doAsync

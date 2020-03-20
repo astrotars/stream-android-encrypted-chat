@@ -18,9 +18,9 @@ class UsersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
 
-        val user = intent.getStringExtra(UsersActivity.EXTRA_USER)!!
-        val authToken = intent.getStringExtra(UsersActivity.EXTRA_AUTH_TOKEN)!!
-        val virgilToken = intent.getStringExtra(UsersActivity.EXTRA_VIRGIL_TOKEN)!!
+        val user = intent.getStringExtra(EXTRA_USER)!!
+        val authToken = intent.getStringExtra(EXTRA_AUTH_TOKEN)!!
+        val virgilToken = intent.getStringExtra(EXTRA_VIRGIL_TOKEN)!!
 
         val list: ListView = findViewById<View>(R.id.listview) as ListView
 
