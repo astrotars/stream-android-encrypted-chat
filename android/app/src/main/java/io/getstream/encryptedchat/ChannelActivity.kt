@@ -64,17 +64,12 @@ class ChannelActivity : AppCompatActivity() {
         eThree: EThree,
         receiverPublicKeys: LookupResult
     ) {
-        viewModel = ViewModelProviders.of(
-            context,
-            ChannelViewModelFactory(context.application, channel)
-        ).get(ChannelViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(context, ChannelViewModelFactory(context.application, channel))
+                .get(ChannelViewModel::class.java)
 
         binding!!.viewModel = viewModel
-        binding!!.messageList.setViewHolderFactory(
-            EncryptedMessageViewHolderFactory(
-                eThree
-            )
-        )
+        binding!!.messageList.setViewHolderFactory(EncryptedMessageViewHolderFactory(eThree))
         binding!!.messageList.setViewModel(viewModel!!, context)
         binding!!.messageInput.setViewModel(viewModel, context)
         binding!!.messageInput.eThree = eThree
