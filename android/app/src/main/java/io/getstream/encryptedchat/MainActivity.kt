@@ -8,21 +8,15 @@ import com.getstream.sdk.chat.rest.User
 import com.virgilsecurity.android.common.exceptions.RegistrationException
 import com.virgilsecurity.android.ethree.kotlin.callback.OnGetTokenCallback
 import com.virgilsecurity.android.ethree.kotlin.interaction.EThree
+import io.getstream.encryptedchat.BackendService.getStreamToken
+import io.getstream.encryptedchat.BackendService.getVirgilToken
+import io.getstream.encryptedchat.BackendService.signIn
 import io.getstream.encryptedchat.databinding.ActivityMainBinding
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity() {
-  val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
-  var client: OkHttpClient = OkHttpClient()
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -60,20 +54,6 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun signIn(user: String): String {
-    val response = post("/v1/authenticate", mapOf("user" to user))
-    return response.getString("authToken")
-  }
-
-  private fun getVirgilToken(authToken: String): String {
-    val response = post("/v1/virgil-credentials", mapOf(), authToken)
-    return response.getString("token")
-  }
-
-  private fun getStreamToken(authToken: String): String {
-    val response = post("/v1/stream-credentials", mapOf(), authToken)
-    return response.getString("token")
-  }
 
   private fun initStream(user: String, token: String) {
     StreamChat.init("whe3wer2pf4r", this.applicationContext)
@@ -81,19 +61,4 @@ class MainActivity : AppCompatActivity() {
     val currentUser = User(user, hashMapOf<String, Any>("name" to user))
     client.setUser(currentUser, token)
   }
-
-  private fun post(path: String, body: Map<String, Any>, authToken: String? = null): JSONObject {
-    val request = Request.Builder()
-      .url("https://96154c61.ngrok.io${path}")
-      .post(JSONObject(body).toString().toRequestBody(JSON))
-
-    if (authToken != null) {
-      request.addHeader("Authorization", "Bearer $authToken")
-    }
-
-    client.newCall(request.build()).execute().use {
-      return JSONObject(it.body!!.string())
-    }
-  }
-
 }

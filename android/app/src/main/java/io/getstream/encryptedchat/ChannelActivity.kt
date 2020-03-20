@@ -7,12 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.getstream.sdk.chat.StreamChat
-import com.getstream.sdk.chat.model.Channel
 import com.getstream.sdk.chat.model.ModelType
-import com.getstream.sdk.chat.rest.request.QueryUserRequest
+import com.getstream.sdk.chat.rest.interfaces.ChannelCallback
+import com.getstream.sdk.chat.rest.response.ChannelResponse
 import com.getstream.sdk.chat.viewmodel.ChannelViewModel
 import com.getstream.sdk.chat.viewmodel.ChannelViewModelFactory
-import com.virgilsecurity.android.common.exceptions.RegistrationException
 import com.virgilsecurity.android.ethree.kotlin.callback.OnGetTokenCallback
 import com.virgilsecurity.android.ethree.kotlin.interaction.EThree
 import io.getstream.encryptedchat.databinding.ActivityChannelBinding
@@ -35,33 +34,45 @@ class ChannelActivity : AppCompatActivity() {
             override fun onGetToken() = virgilToken
         }).get()
 
-        doAsync {
-            val channelId =
-                listOf(user, otherUser).sorted().joinToString("-")
-
-            val channel = client.channel(ModelType.channel_messaging, channelId)
-
-            val receiverPublicKeys = eThree.lookupPublicKeys(otherUser).get()
-
-            uiThread { context ->
-                viewModel = ViewModelProviders.of(
-                    context,
-                    ChannelViewModelFactory(context.application, channel)
-                ).get(ChannelViewModel::class.java)
-
-                binding!!.viewModel = viewModel
-                binding!!.messageList.setViewHolderFactory(EncryptedMessageViewHolderFactory(eThree))
-                binding!!.messageList.setViewModel(viewModel!!, context)
-                binding!!.messageInput.setViewModel(viewModel, context)
-                binding!!.messageInput.eThree = eThree
-                binding!!.messageInput.receiverPublicKeys = receiverPublicKeys
-                binding!!.channelHeader.setViewModel(viewModel, context)
-            }
-        }
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_channel)
         binding!!.lifecycleOwner = this
 
+        doAsync {
+            val users = listOf(user, otherUser).sorted()
+
+            val receiverPublicKeys = eThree.lookupPublicKeys(otherUser).get()
+            val channel = client.channel(ModelType.channel_messaging, users.joinToString("-"))
+
+            channel.name = users.joinToString(", ")
+            channel.image = "https://robohash.org/${channel.name}.png"
+            channel.update(object : ChannelCallback {
+                override fun onSuccess(response: ChannelResponse?) {
+                    uiThread { context ->
+                        viewModel = ViewModelProviders.of(
+                            context,
+                            ChannelViewModelFactory(context.application, channel)
+                        ).get(ChannelViewModel::class.java)
+
+                        binding!!.viewModel = viewModel
+                        binding!!.messageList.setViewHolderFactory(
+                            EncryptedMessageViewHolderFactory(
+                                eThree
+                            )
+                        )
+                        binding!!.messageList.setViewModel(viewModel!!, context)
+                        binding!!.messageInput.setViewModel(viewModel, context)
+                        binding!!.messageInput.eThree = eThree
+                        binding!!.messageInput.receiverPublicKeys = receiverPublicKeys
+                        binding!!.channelHeader.setViewModel(viewModel, context)
+
+                    }
+                }
+
+                override fun onError(errMsg: String?, errCode: Int) {
+
+                }
+            })
+        }
     }
 
     companion object {

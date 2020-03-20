@@ -6,7 +6,6 @@ import com.getstream.sdk.chat.rest.Message
 import com.getstream.sdk.chat.view.MessageInputView
 import com.virgilsecurity.android.ethree.kotlin.interaction.EThree
 import com.virgilsecurity.sdk.crypto.VirgilPublicKey
-import org.jetbrains.anko.doAsync
 
 class EncryptedMessageInputView : MessageInputView {
     var receiverPublicKeys: Map<String, VirgilPublicKey>? = null

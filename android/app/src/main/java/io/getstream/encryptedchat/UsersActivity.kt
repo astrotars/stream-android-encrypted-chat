@@ -8,16 +8,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import io.getstream.encryptedchat.BackendService.getUsers
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import org.json.JSONArray
 
 
 class UsersActivity : AppCompatActivity() {
-    var client: OkHttpClient = OkHttpClient()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
@@ -46,18 +42,6 @@ class UsersActivity : AppCompatActivity() {
             uiThread {
                 adapter.addAll(users)
             }
-        }
-    }
-
-    private fun getUsers(authToken: String): List<String> {
-        val request = Request.Builder()
-            .url("https://96154c61.ngrok.io/v1/users")
-            .addHeader("Authorization", "Bearer $authToken")
-            .get()
-
-        client.newCall(request.build()).execute().use {
-            val jsonArray = JSONArray(it.body!!.string())
-            return List(jsonArray.length()) { i -> jsonArray.get(i).toString() }
         }
     }
 
