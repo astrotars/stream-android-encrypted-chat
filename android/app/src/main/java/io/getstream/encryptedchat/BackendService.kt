@@ -28,18 +28,6 @@ object BackendService {
             .getString("token")
     }
 
-    fun getUsers(authToken: String): List<String> {
-        val request = Request.Builder()
-            .url("${apiRoot}/v1/users")
-            .addHeader("Authorization", "Bearer $authToken")
-            .get()
-
-        http.newCall(request.build()).execute().use {
-            val jsonArray = JSONArray(it.body!!.string())
-            return List(jsonArray.length()) { i -> jsonArray.get(i).toString() }
-        }
-    }
-
     private fun post(path: String, body: Map<String, Any>, authToken: String? = null): JSONObject {
         val request = Request.Builder()
             .url("${apiRoot}${path}")
@@ -51,6 +39,18 @@ object BackendService {
 
         http.newCall(request.build()).execute().use {
             return JSONObject(it.body!!.string())
+        }
+    }
+
+    fun getUsers(authToken: String): List<String> {
+        val request = Request.Builder()
+            .url("${apiRoot}/v1/users")
+            .addHeader("Authorization", "Bearer $authToken")
+            .get()
+
+        http.newCall(request.build()).execute().use {
+            val jsonArray = JSONArray(it.body!!.string())
+            return List(jsonArray.length()) { i -> jsonArray.get(i).toString() }
         }
     }
 }

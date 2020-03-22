@@ -11,11 +11,7 @@ import com.virgilsecurity.android.ethree.kotlin.interaction.EThree
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class EncryptedMessageViewHolder(
-    resId: Int,
-    viewGroup: ViewGroup?,
-    private val eThree: EThree
-) :
+class EncryptedMessageViewHolder(resId: Int, viewGroup: ViewGroup?, private val eThree: EThree) :
     MessageListItemViewHolder(resId, viewGroup) {
 
     override fun bind(
@@ -24,7 +20,7 @@ class EncryptedMessageViewHolder(
         messageListItem: MessageListItem,
         position: Int
     ) {
-        if (messageListItem.type != MESSAGEITEM_MESSAGE || messageListItem.message.type != ModelType.message_regular) {
+        if (messageListItem.message.type != ModelType.message_regular) {
             super.bind(context, channelState, messageListItem, position)
             return
         }

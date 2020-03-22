@@ -24,9 +24,6 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class ChannelActivity : AppCompatActivity() {
-    private var viewModel: ChannelViewModel? = null
-    private var binding: ActivityChannelBinding? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,8 +36,9 @@ class ChannelActivity : AppCompatActivity() {
             override fun onGetToken() = virgilToken
         }).get()
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_channel)
-        binding!!.lifecycleOwner = this
+        val binding: ActivityChannelBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_channel)
+        binding.lifecycleOwner = this
 
         doAsync {
             val users = listOf(user, otherUser).sorted()
@@ -58,7 +56,15 @@ class ChannelActivity : AppCompatActivity() {
                 override fun onSuccess(response: ChannelState?) {
                     channel.update(object : ChannelCallback {
                         override fun onSuccess(response: ChannelResponse?) {
-                            uiThread { loadMessages(it, channel, eThree, receiverPublicKeys) }
+                            uiThread {
+                                configureViews(
+                                    it,
+                                    binding,
+                                    channel,
+                                    eThree,
+                                    receiverPublicKeys
+                                )
+                            }
                         }
 
                         override fun onError(errMsg: String?, errCode: Int) {
@@ -74,24 +80,24 @@ class ChannelActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadMessages(
+    private fun configureViews(
         context: ChannelActivity,
+        binding: ActivityChannelBinding,
         channel: Channel?,
         eThree: EThree,
         receiverPublicKeys: LookupResult
     ) {
-        viewModel =
+        val viewModel =
             ViewModelProviders.of(context, ChannelViewModelFactory(context.application, channel))
                 .get(ChannelViewModel::class.java)
 
-        binding!!.viewModel = viewModel
-        binding!!.messageList.setViewHolderFactory(EncryptedMessageViewHolderFactory(eThree))
-        binding!!.messageList.setViewModel(viewModel!!, context)
-        binding!!.messageInput.setViewModel(viewModel, context)
-        binding!!.messageInput.eThree = eThree
-        binding!!.messageInput.receiverPublicKeys = receiverPublicKeys
-        binding!!.channelHeader.setViewModel(viewModel, context)
-        binding!!.invalidateAll()
+        binding.viewModel = viewModel
+        binding.messageList.setViewHolderFactory(EncryptedMessageViewHolderFactory(eThree))
+        binding.messageList.setViewModel(viewModel, context)
+        binding.messageInput.setViewModel(viewModel, context)
+        binding.messageInput.eThree = eThree
+        binding.messageInput.receiverPublicKeys = receiverPublicKeys
+        binding.channelHeader.setViewModel(viewModel, context)
     }
 
     companion object {

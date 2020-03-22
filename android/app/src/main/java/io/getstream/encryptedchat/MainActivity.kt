@@ -1,5 +1,6 @@
 package io.getstream.encryptedchat
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -20,30 +21,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // we're using data binding in this example
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
-        // Specify the current activity as the lifecycle owner.
         binding.lifecycleOwner = this
 
         binding.submit.setOnClickListener {
             val user: String = binding.user.text.toString()
-            val context = this
 
             doAsync {
                 val authToken = signIn(user)
                 val streamToken = getStreamToken(authToken)
                 val virgilToken = getVirgilToken(authToken)
-
-                val eThree = EThree.initialize(context, object : OnGetTokenCallback {
-                    override fun onGetToken() = virgilToken
-                }).get()
-
-                try {
-                    eThree.register().execute()
-                } catch (e: RegistrationException) {
-                    // already registered
-                }
+                initVirgil(it.context, virgilToken)
 
                 uiThread { context ->
                     initStream(user, streamToken)
@@ -51,6 +40,18 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
+        }
+    }
+
+    private fun initVirgil(context: Context, virgilToken: String) {
+        val eThree = EThree.initialize(context, object : OnGetTokenCallback {
+            override fun onGetToken() = virgilToken
+        }).get()
+
+        try {
+            eThree.register().execute()
+        } catch (e: RegistrationException) {
+            // already registered
         }
     }
 
