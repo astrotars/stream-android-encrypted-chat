@@ -10,7 +10,10 @@ import com.getstream.sdk.chat.StreamChat
 import com.getstream.sdk.chat.model.Channel
 import com.getstream.sdk.chat.model.ModelType
 import com.getstream.sdk.chat.rest.interfaces.ChannelCallback
+import com.getstream.sdk.chat.rest.interfaces.QueryChannelCallback
+import com.getstream.sdk.chat.rest.request.ChannelQueryRequest
 import com.getstream.sdk.chat.rest.response.ChannelResponse
+import com.getstream.sdk.chat.rest.response.ChannelState
 import com.getstream.sdk.chat.viewmodel.ChannelViewModel
 import com.getstream.sdk.chat.viewmodel.ChannelViewModelFactory
 import com.virgilsecurity.android.common.data.model.LookupResult
@@ -46,9 +49,17 @@ class ChannelActivity : AppCompatActivity() {
 
             channel.name = users.joinToString(", ")
             channel.image = "https://robohash.org/${channel.name}"
-            channel.update(object : ChannelCallback {
-                override fun onSuccess(response: ChannelResponse?) {
-                    uiThread { loadMessages(it, channel, eThree, receiverPublicKeys) }
+            channel.query(ChannelQueryRequest(), object : QueryChannelCallback {
+                override fun onSuccess(response: ChannelState?) {
+                    channel.update(object : ChannelCallback {
+                        override fun onSuccess(response: ChannelResponse?) {
+                            uiThread { loadMessages(it, channel, eThree, receiverPublicKeys) }
+                        }
+
+                        override fun onError(errMsg: String?, errCode: Int) {
+
+                        }
+                    })
                 }
 
                 override fun onError(errMsg: String?, errCode: Int) {

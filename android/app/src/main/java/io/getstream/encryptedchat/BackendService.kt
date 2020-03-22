@@ -11,7 +11,7 @@ import org.json.JSONObject
 object BackendService {
     private val http = OkHttpClient()
     private val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
-    private const val apiRoot = "https://348e7677.ngrok.io"
+    private const val apiRoot = "https://3c3e4c3a.ngrok.io"
 
     fun signIn(user: String): String {
         return post("/v1/authenticate", mapOf("user" to user))

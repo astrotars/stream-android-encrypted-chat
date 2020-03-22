@@ -29,10 +29,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:text="Login"
-            app:layout_constraintBaseline_toBaselineOf="@+id/username"
+            app:layout_constraintBaseline_toBaselineOf="@+id/user"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/username" />
+            app:layout_constraintStart_toEndOf="@+id/user" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
