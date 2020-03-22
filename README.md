@@ -151,7 +151,7 @@ application provides three endpoints:
 
 First we log in to a user. To keep things simple we'll just have an empty form that let's you log in with any name:
 
-![](:/5152189198064f989ed64b27e6bb55be)
+![](images/login.png)
 
 This is a simple form that takes any arbitrary name, effectively allowing us to log in as anyone. We set this up in our `MainActivity`:
 
@@ -294,7 +294,7 @@ Now that we have our tokens and registration, let's find a user to chat with!
 
 To keep things simple, we'll get all registered users from our backend and display them in a simple build in list view:
 
-![](:/4305383156734720b9d77061b4a70a55)
+![](images/users.png)
 
 Here is the activity:
 
@@ -614,7 +614,7 @@ First we check if we have a regular message then, if we do, we decrypt. We copy 
 
 Putting these last steps together, we'll see our final product:
 
-![](:/01dc8d9f26f74d139e074cd489bffd82)
+![](images/channel.png)
 
 And that's it! We now have private 1-on-1 encrypted chat.
 
