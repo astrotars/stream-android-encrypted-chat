@@ -45,10 +45,15 @@ class ChannelActivity : AppCompatActivity() {
         doAsync {
             val users = listOf(user, otherUser).sorted()
             val receiverPublicKeys = eThree.lookupPublicKeys(otherUser).get()
-            val channel = client.channel(ModelType.channel_messaging, users.joinToString("-"))
+            val channel = client.channel(
+                ModelType.channel_messaging,
+                hashMapOf<String, Any>(
+                    "name" to users.joinToString(", "),
+                    "image" to "https://robohash.org/${users.joinToString("-")}"
+                ),
+                users
+            )
 
-            channel.name = users.joinToString(", ")
-            channel.image = "https://robohash.org/${channel.name}"
             channel.query(ChannelQueryRequest(), object : QueryChannelCallback {
                 override fun onSuccess(response: ChannelState?) {
                     channel.update(object : ChannelCallback {
@@ -86,6 +91,7 @@ class ChannelActivity : AppCompatActivity() {
         binding!!.messageInput.eThree = eThree
         binding!!.messageInput.receiverPublicKeys = receiverPublicKeys
         binding!!.channelHeader.setViewModel(viewModel, context)
+        binding!!.invalidateAll()
     }
 
     companion object {
