@@ -586,7 +586,7 @@ class EncryptedMessageViewHolder(resId: Int, viewGroup: ViewGroup?, private val 
 }
 ```
 
-First, we check if we have a regular message and if we do, we decrypt. We copy our message object to avoid mutating the original version (Stream caches this and we'll mess things up if we manipulate that). With that copy, we check if the message is ours or theirs. In our case, we know how to decrypt directly since we created it. If it's theirs, we need to look up their public key to verify the message. We pass this to Virgil and do our decryption. 
+First, we check if we have a regular message and if we do, we decrypt it. We copy our message object to avoid mutating the original version (Stream caches this and we'll mess things up if we manipulate that). With that copy, we check if the message is ours or theirs. In our case, we know how to decrypt directly since we created it. If it's theirs, we need to look up their public key to verify the message. We pass this to Virgil and do our decryption. 
 
 Putting these last steps together, we'll see our final product:
 
