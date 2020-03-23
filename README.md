@@ -1,6 +1,6 @@
 # Android Encrypted Chat with Stream
 
-In this tutorial we'll build encrypted chat with Android. To do this, we'll combine Stream Chat and Virgil Security. Both Stream Chat and Virgil make it easy to build a solution with great security with all the features you expect. These two services allow developers to integrate chat that is zero knowledge to your backend or Stream's. The application embeds Virgil Security's [eThree Kit](https://github.com/VirgilSecurity/virgil-e3kit-kotlin) with Stream Chat's [Android](https://github.com/GetStream/stream-chat-android) components. All source code for this application is available on [GitHub](https://github.com/psylinse/stream-android-encrypted-chat).
+In this tutorial, we'll build encrypted chat with Android. To do this, we'll combine Stream Chat and Virgil Security. Both Stream Chat and Virgil make it easy to build a solution with great security with all the features you expect. These two services allow developers to integrate chat that is zero knowledge to your backend or Stream's. The application embeds Virgil Security's [eThree Kit](https://github.com/VirgilSecurity/virgil-e3kit-kotlin) with Stream Chat's [Android](https://github.com/GetStream/stream-chat-android) components. All source code for this application is available on [GitHub](https://github.com/psylinse/stream-android-encrypted-chat).
 
 ## What is end-to-end encryption?
 
@@ -12,29 +12,24 @@ During this tutorial, we will create a Stream Chat app that uses Virgil's encryp
 
 ## Building an Encrypted Chat application
 
-To build this application we'll mostly rely on two libraries, Stream Chat Android and Virgil Security Kotlin. Our final product will encrypt text on device before sending a message. Decryption and verification will both happen in the receiver's device. Stream's Chat API will only see ciphertext, ensuring our user's data is never seen by anyone else, including us.
+To build this application we'll mostly rely on two libraries, Stream Chat Android and Virgil Security Kotlin. Our final product will encrypt text on the device before sending a message. Decryption and verification will both happen in the receiver's device. Stream's Chat API will only see ciphertext, ensuring our user's data is never seen by anyone else, including us.
 
 To accomplish this, the app performs the following steps:
 
 1. A user authenticates with your backend.
-2. The user's app requests a Stream auth token and api key from the backend. The
+2. The user's app requests a Stream auth token and API key from the backend. The
    Android app creates a
-   [Stream Chat Client](https://getstream.io/chat/docs/#init_and_users) for that
-   user.
+   [Stream Chat Client](https://getstream.io/chat/docs/#init_and_users) for that user.
 3. The user's app requests a Virgil auth token from the backend and registers
-   with Virgil. This generates their private and public key. The private key is
-   stored locally, and the public key is stored in Virgil.
+   with Virgil. This generates their private and public key. The private key is stored locally, and the public key is stored in Virgil.
 4. Once the user decides who they want to chat with the app creates and
    joins a
    [Stream Chat Channel](https://getstream.io/chat/docs/#initialize_channel).
-5. The app asks Virgil for receiver's public key.
+5. The app asks Virgil for the receiver's public key.
 6. The user types a message and sends it to Stream. Before sending, the app
-   passes the receiver's public key to Virgil to encrypt the message. The
-   message is relayed through Stream Chat to the receiver. Stream receives
-   ciphertext, meaning they can never see the original message.
+   passes the receiver's public key to Virgil to encrypt the message. The message is relayed through Stream Chat to the receiver. Stream receives ciphertext, meaning they can never see the original message.
 7. The receiving user decrypts the sent message using Virgil. When the message
-   is received, app decrypts the message using the Virgil and this is
-   passed along to Stream's UI components. Virgil verifies the message is
+   is received, app decrypts the message using the Virgil and this is passed along to Stream's UI components. Virgil verifies the message is
    authentic by using the sender's public key.
 
 While this looks complicated, Stream and Virgil do most of the work for us. We'll use Stream's out of the box UI components to render the chat UI and Virgil to do all of the cryptography and key management. We simply combine these services. 
@@ -47,7 +42,7 @@ Let's walk through and look at the important code needed for each step.
 
 Basic knowledge of Android (Kotlin) and Node.js is required to follow this tutorial. This code is intended to run locally on your machine. 
 
-We use [Anko](https://github.com/Kotlin/anko/wiki/Anko-Coroutines) to simplify our asnychronous code. Please note this library was recently deprecated. There are also likely bugs in our async implemenation. However, we chose to keep the noise to a minimum in this tutorial by leveraging Anko and keeping asynch simple. Please use best practices for asynchronous code.
+We use [Anko](https://github.com/Kotlin/anko/wiki/Anko-Coroutines) to simplify our asynchronous code. Please note this library was recently deprecated. There are also likely bugs in our async implementation. However, we chose to keep the noise to a minimum in this tutorial by leveraging Anko and keeping async simple. Please use best practices for asynchronous code.
 
 You will need an account with [Stream](https://getstream.io/accounts/signup/) 
 and [Virgil](https://dashboard.virgilsecurity.com/signup). Once you've created
@@ -133,7 +128,7 @@ For our React frontend to interact with Stream and Virgil, the application provi
 
 ## Step 1. User Authenticates With Backend
 
-First we log in to a user. To keep things simple we'll just have an empty form that let's you log in with any name:
+First, we log in to a user. To keep things simple we'll just have an empty form that lets you log in with any name:
 
 ![](images/login.png)
 
@@ -270,13 +265,13 @@ private fun initVirgil(context: Context, virgilToken: String) {
 }
 ```
 
-Virgil's client is called `EThree`. We initialize an `EThree` instance and register. This call generates a private key and stores it on the device and sends our public key to virgil. If we get a `RegistrationException` we have already registered this user. Keep in mind, you cannot log into the same user on a different device, since we're not sharing the private key with the other device! This is possible, but out of scope for this tutorial. If you'd like to accomplish this, see Virgil's [documentation](https://developer.virgilsecurity.com/docs/e3kit/multi-device-support/).
+Virgil's client is called `EThree`. We initialize an `EThree` instance and register. This call generates a private key and stores it on the device and sends our public key to Virgil. If we get a `RegistrationException` we have already registered this user. Keep in mind, you cannot log into the same user on a different device since we're not sharing the private key with the other device! This is possible, but out of scope for this tutorial. If you'd like to accomplish this, see Virgil's [documentation](https://developer.virgilsecurity.com/docs/e3kit/multi-device-support/).
 
 Now that we have our tokens and registration, let's find a user to chat with!
 
 ## Step 2: List users
 
-To keep things simple, we'll get all registered users from our backend and display them in a simple build in list view:
+To keep things simple, we'll get all registered users from our backend and display them in a simple list view:
 
 ![](images/users.png)
 
@@ -328,11 +323,11 @@ And the layout:
     android:layout_height="wrap_content" />
 ```
 
-We make an API call via `BackendService.getUsers` and filter the  logged in user out. We add the response to a simple `ArrayAdapter` and display our results in a `ListView`. When a user clicks on a list item, we start a `ChannelActivity` which is a 1-on-1 chat channel.
+We make an API call via `BackendService.getUsers` and filter the logged-in user out. We add the response to a simple `ArrayAdapter` and display our results in a `ListView`. When a user clicks on a list item, we start a `ChannelActivity` which is a 1-on-1 chat channel.
 
 # Step 3: Create a Private 1-on-1 Channel
 
-First we need to create our channel for our private chat. Let's look at our activity and layout:
+First, we need to create our channel for our private chat. Let's look at our activity and layout:
 
 ```kotlin
 class ChannelActivity : AppCompatActivity() {
@@ -492,7 +487,7 @@ And the layout:
 </layout>
 ```
 
-We use off the shelf Stream UI components with two slight variations. First, we hook in a custom `EncryptedMessageInputView` which allows us to encrypt a message before sending. We also hook in a custom `EncryptedMessageViewHolderFactory` which allows message decryption (we'll look at this in a bit). The important bits start inside of `doAsync`. First we look up the other user's public key. This let's use encrypt our messages and verify their messages are authentic. Next, we create a channel in Stream via `.query`. Once then channel is created we load messages. Before we look at how we load messages, we need to send a message first.
+We use off the shelf Stream UI components with two slight variations. First, we hook in a custom `EncryptedMessageInputView` which allows us to encrypt a message before sending it. We also hook in a custom `EncryptedMessageViewHolderFactory` which allows message decryption (we'll look at this in a bit). The important bits start inside of `doAsync`. First, we look up the other user's public key. This let's use encrypt our messages and verify their messages are authentic. Next, we create a channel in Stream via `.query`. Once then channel is created we load messages. Before we look at how we load messages, we need to send a message first.
 
 ## Step 4: Sending an Encrypted Message
 
@@ -518,7 +513,7 @@ class EncryptedMessageInputView : MessageInputView {
 }
 ```
 
-We override Stream's `MessageInputView` and simply decrypt the message before sending it. `MessageInputView` calles `prepareMessage` before sending it to the API so we override this and encrypt before sending it along. 
+We override Stream's `MessageInputView` and simply decrypt the message before sending it. `MessageInputView` calls `prepareMessage` before sending it to the API so we override this and encrypt before sending it along. 
 
 # Step 5: Viewing Messages
 
@@ -593,11 +588,10 @@ class EncryptedMessageViewHolder(resId: Int, viewGroup: ViewGroup?, private val 
 }
 ```
 
-First we check if we have a regular message then, if we do, we decrypt. We copy our message object to avoid mutating the original version (Stream caches this and we'll mess things up if we manipulate that). With that copy, we check if the message is ours or theirs. In our case, we know how to decrypt directly since we created it. If it's theirs, we need to lookup their public key to verify the message. We pass this to Virgil and do our decryption. 
+First, we check if we have a regular message and if we do, we decrypt. We copy our message object to avoid mutating the original version (Stream caches this and we'll mess things up if we manipulate that). With that copy, we check if the message is ours or theirs. In our case, we know how to decrypt directly since we created it. If it's theirs, we need to look up their public key to verify the message. We pass this to Virgil and do our decryption. 
 
 Putting these last steps together, we'll see our final product:
 
 ![](images/channel.png)
 
-And that's it! We now have private 1-on-1 encrypted chat.
-
+And that's it! We now have a private 1-on-1 encrypted chat.
