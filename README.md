@@ -44,9 +44,7 @@ Basic knowledge of Android (Kotlin) and Node.js is required to follow this tutor
 
 We use [Anko](https://github.com/Kotlin/anko/wiki/Anko-Coroutines) to simplify our asynchronous code. Please note this library was recently deprecated. There are also likely bugs in our async implementation. However, we chose to keep the noise to a minimum in this tutorial by leveraging Anko and keeping async simple. Please use best practices for asynchronous code.
 
-You will need an account with [Stream](https://getstream.io/accounts/signup/) 
-and [Virgil](https://dashboard.virgilsecurity.com/signup). Once you've created
-your accounts, you can place your credentials in `backend/.env` if you'd like to run the code. You can use `backend/.env.example` as a reference for what credentials are required.
+You will need an account with [Stream](https://getstream.io/accounts/signup/) and [Virgil](https://dashboard.virgilsecurity.com/signup). Once you've created your accounts, you can place your credentials in `backend/.env` if you'd like to run the code. You can use `backend/.env.example` as a reference for what credentials are required. You also need to place your Stream API key in `MainActivity.kt:60`.
 
 ## Step 0. Setup the Backend
 
