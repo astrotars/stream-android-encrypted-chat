@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initStream(user: String, token: String) {
-        StreamChat.init("whe3wer2pf4r", this.applicationContext)
+        StreamChat.init("<INSERT_STREAM_API_KEY_HERE>", this.applicationContext)
         val client = StreamChat.getInstance(this.application)
         val currentUser = User(user, hashMapOf<String, Any>("name" to user))
         client.setUser(currentUser, token)
