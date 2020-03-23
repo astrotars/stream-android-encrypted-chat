@@ -1,6 +1,6 @@
 # Android Encrypted Chat with Stream
 
-In this tutorial, we'll build encrypted chat with Android. To do this, we'll combine Stream Chat and Virgil Security. Both Stream Chat and Virgil make it easy to build a solution with great security with all the features you expect. These two services allow developers to integrate chat that is zero knowledge to your backend or Stream's. The application embeds Virgil Security's [eThree Kit](https://github.com/VirgilSecurity/virgil-e3kit-kotlin) with Stream Chat's [Android](https://github.com/GetStream/stream-chat-android) components. All source code for this application is available on [GitHub](https://github.com/psylinse/stream-android-encrypted-chat).
+In this tutorial, we'll build encrypted chat with Android. To do this, we'll combine [Stream Chat](https://getstream.io/chat/) and [Virgil Security](https://virgilsecurity.com/). Both Stream and Virgil make it easy to build a solution with great security with all the features you expect. These two services allow developers to integrate chat that is zero knowledge to your backend or Stream's. The application embeds Virgil Security's [eThree Kit](https://github.com/VirgilSecurity/virgil-e3kit-kotlin) with Stream Chat's [Android](https://github.com/GetStream/stream-chat-android) components. All source code for this application is available on [GitHub](https://github.com/psylinse/stream-android-encrypted-chat).
 
 ## What is end-to-end encryption?
 
@@ -42,7 +42,7 @@ Let's walk through and look at the important code needed for each step.
 
 Basic knowledge of Android (Kotlin) and Node.js is required to follow this tutorial. This code is intended to run locally on your machine. 
 
-We use [Anko](https://github.com/Kotlin/anko/wiki/Anko-Coroutines) to simplify our asynchronous code. Please note this library was recently deprecated. There are also likely bugs in our async implementation. However, we chose to keep the noise to a minimum in this tutorial by leveraging Anko and keeping async simple. Please use best practices for asynchronous code.
+We use [Anko](https://github.com/Kotlin/anko/wiki/Anko-Coroutines) to simplify our asynchronous code. Please note this library was recently [deprecated](https://github.com/Kotlin/anko/blob/master/GOODBYE.md). There are also likely bugs in our async implementation. However, we chose to keep the noise to a minimum in this tutorial by leveraging Anko and keeping async simple. Please use best practices for asynchronous code.
 
 You will need an account with [Stream](https://getstream.io/accounts/signup/) and [Virgil](https://dashboard.virgilsecurity.com/signup). Once you've created your accounts, you can place your credentials in `backend/.env` if you'd like to run the code. You can use `backend/.env.example` as a reference for what credentials are required. You also need to place your Stream API key in `MainActivity.kt:60`.
 
