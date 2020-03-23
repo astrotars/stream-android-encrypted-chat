@@ -511,7 +511,7 @@ class EncryptedMessageInputView : MessageInputView {
 }
 ```
 
-We override Stream's `MessageInputView` and simply decrypt the message before sending it. `MessageInputView` calls `prepareMessage` before sending it to the API so we override this and encrypt before sending it along. 
+We override Stream's `MessageInputView` and simply decrypt the message before sending it. `MessageInputView` calls `prepareMessage` before sending it to the API so we override this and encrypt before sending it along. Please note, updating a message does not utilize this method, so be aware if you want to support edit functionality. You can consider building your own `MessageInputView`. For brevity, we won't go there in this tutorial.
 
 # Step 5: Viewing Messages
 
